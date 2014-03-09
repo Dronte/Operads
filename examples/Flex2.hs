@@ -54,7 +54,7 @@ main = do
   forkIO $ counter (tsGenerator :: [OperadElement Integer Rational PermRPath]) "PermRPath"
   forkIO $ counter (tsGenerator :: [OperadElement Integer Rational RPermPath]) "RPermPath"
   forkIO $ counter (tsGenerator :: [OperadElement Integer Rational RPermRPath]) "RPermRPath"
-  threadDelay (300*second_us)
+  threadDelay (30000*second_us)
 
 
 --counter = do
