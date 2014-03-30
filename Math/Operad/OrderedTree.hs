@@ -25,7 +25,7 @@ import Math.Operad.PPrint
 -- and these are expected to control, e.g., composition points in shuffle operad compositions.
 -- The vertices carry labels, used for the ordering on trees and to distinguish different
 -- basis corollas of the same arity. 
-data (Ord a, Show a) => PreDecoratedTree a b = DTLeaf !b | 
+data PreDecoratedTree a b = DTLeaf !b | 
                                        DTVertex {
                                          vertexType :: !a, 
                                          subTrees :: ![PreDecoratedTree a b]}
@@ -40,8 +40,8 @@ instance (Ord a, Show a) => Functor (PreDecoratedTree a) where
     fmap f (DTVertex t ts) = DTVertex t (map (fmap f) ts)
 
 instance (Ord a, Show a) => Foldable (PreDecoratedTree a) where
-    foldMap f (DTLeaf b) = f b
-    foldMap f (DTVertex _ ts) = mconcat (map (foldMap f) ts)
+   foldMap f (DTLeaf b) = f b
+   foldMap f (DTVertex _ ts) = mconcat (map (foldMap f) ts)
 
 instance (Ord a, Show a) => Traversable (PreDecoratedTree a) where
     traverse f (DTLeaf b) = DTLeaf <$> f b
@@ -76,7 +76,7 @@ type DecoratedTree a = PreDecoratedTree a Int
 -- trees. These are parametrized by types implementing the type class 'TreeOrdering', 
 -- and this is a data type for a tree carrying its comparison type. We call these 
 -- /ordered trees/. 
-data (Ord a, Show a, TreeOrdering t) => OrderedTree a t = OT (DecoratedTree a) t deriving (Eq, Show, Read)
+data OrderedTree a t = OT (DecoratedTree a) t deriving (Eq, Show, Read)
 
 instance (Ord a, Show a, TreeOrdering t) => PPrint (OrderedTree a t) where
     pp (OT dect _) = pp dect

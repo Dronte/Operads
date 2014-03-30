@@ -17,12 +17,10 @@ import Math.Operad.MapOperad
 
 import Math.Operad.OrderedTree
 
-#ifdef TRACE
 import Debug.Trace
 import Math.Operad.PPrint
-#endif
 
--- * Fundamental data types and instances
+-- * Fundamental data types and instances 
 
 -- | The number of internal vertices of a tree.
 operationDegree :: (Ord a, Show a) => DecoratedTree a -> Int

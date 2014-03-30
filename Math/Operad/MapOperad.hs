@@ -5,26 +5,17 @@
 
 module Math.Operad.MapOperad where
 
-#ifndef USE_OLDMAP
 import qualified Math.Operad.Map as Map
 import Math.Operad.Map (Map)
-#else 
-import qualified Data.Map as Map
-import Data.Map (Map)
-#endif
 import Data.Maybe
 import Math.Operad.OrderedTree
 import Math.Operad.PPrint
 
-#ifndef USE_OLDMAP
 type MonomialMap a t n = Map a t n
-#else
-type MonomialMap a t n = Map (OrderedTree a t) n
-#endif
-
+--type MonomialMap a t n = Map (OrderedTree a t) n
 -- | The type carrying operadic elements. An element in an operad is an associative array 
 -- with keys being labeled trees and values being their coefficients. 
-newtype (Ord a, Show a, TreeOrdering t) => OperadElement a n t = OE (MonomialMap a t n) deriving (Eq, Ord, Show, Read)
+newtype OperadElement a n t = OE (MonomialMap a t n) deriving (Eq, Ord, Show, Read)
 
 instance (Ord a, Show a, Show n, TreeOrdering t) => PPrint (OperadElement a n t) where
       pp (OE m) = if str == "" then "0" else str 
