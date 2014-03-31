@@ -3,6 +3,7 @@ module Main where
 import Math.Operad 
 import Data.List (nub)
 import Control.Concurrent
+import Utils
 
 a = corolla 1 [1,2]
 b = corolla 2 [1,2]
@@ -38,8 +39,14 @@ second_us = 1000000
 
 main = do
   putStrLn $ "length ad1:\t" ++ (show $ length ad1)
-  putStrLn $ "length ad2:\t" ++ (show $ length ad2)
-  putStrLn $ "length ad3:\t" ++ (show $ length ad3)
+  putStrLn $ "dimensions of ad1 \t"
+  putStrLn $ unlines $ map show $ zip [1..5] $ map  (countDimension ad1) [1..6]
+  putStrLn $ "length ad2:\t" ++ (show $ length ad2)                          
+  putStrLn $ "dimensions of ad2 \t"                                          
+  putStrLn $ unlines $ map show $ zip [1..5] $ map  (countDimension ad2) [1..6]
+  putStrLn $ "length ad3:\t" ++ (show $ length ad3)                          
+  putStrLn $ "dimensions of ad3 \t"                                          
+  putStrLn $ unlines $ map show $ zip [1..5] $ map  (countDimension ad3) [1..6]
   putStrLn $ "ad2 == ad3:\t" ++ (show $ ad2 == ad3)
   putStrLn $ "length nub (map leadingMonomial) ad1:\t" ++ (show $ length $ nub $ map leadingMonomial ad1)
   putStrLn $ "length nub (map leadingMonomial) ad2:\t" ++ (show $ length $ nub $ map leadingMonomial ad2)

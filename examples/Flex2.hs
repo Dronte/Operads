@@ -22,7 +22,7 @@ tsGenerator = map oet
 
   
 flex :: TreeOrdering t => [OperadElement Integer Rational t] -> [[OperadElement Integer Rational t]]
-flex ts = [fst a |
+flex ts = take 3 [fst a |
                    a<-generateList[(ad0,stepOperadicBuchberger [] ad0)]]
     where
     opSum = foldr (+) zero
@@ -32,8 +32,8 @@ flex ts = [fst a |
     ad0  = [g1,g2,g3]
     basis (ad,adn) = nub $ ad ++ adn
     step  (ad,adn) = stepOperadicBuchberger ad adn
-    --generateList   = [([],adn0)] ++ [ (basis a,step a) | a<-generateList] 
     generateList list = list ++ [(basis a,step a) | a<-generateList list]
+--generate list !!n - nth iteration stepOperadicBuchberger
 
 counter :: TreeOrdering t => [OperadElement Integer Rational t] -> String -> IO ()
 counter ts name = do
@@ -41,20 +41,23 @@ counter ts name = do
   loop result 1
        where
          loop result number= do
-           putStrLn $ "Length " ++ name ++" "++ (show $ number) ++ " "++(show $ length $ head result )
+           putStrLn $ "Length " ++ name ++" "++ (show $ number) ++ " "++(show $ length $ head result ) ++ "\n"
            loop (tail result) (number+1)
 
 second_us = 1000000
-main = do
-  forkIO $ counter (tsGenerator :: [OperadElement Integer Rational PathPerm]) "PathPerm"
-  forkIO $ counter (tsGenerator :: [OperadElement Integer Rational PathRPerm]) "PathRPerm"
-  forkIO $ counter (tsGenerator :: [OperadElement Integer Rational RPathPerm]) "RPathPerm"
-  forkIO $ counter (tsGenerator :: [OperadElement Integer Rational RPathRPerm]) "RPathRPerm"
-  forkIO $ counter (tsGenerator :: [OperadElement Integer Rational PermPath]) "PermPath"
-  forkIO $ counter (tsGenerator :: [OperadElement Integer Rational PermRPath]) "PermRPath"
-  forkIO $ counter (tsGenerator :: [OperadElement Integer Rational RPermPath]) "RPermPath"
-  forkIO $ counter (tsGenerator :: [OperadElement Integer Rational RPermRPath]) "RPermRPath"
-  threadDelay (30000*second_us)
+list = flex (tsGenerator :: [OperadElement Integer Rational RPermRPath])
+--main = do
+  --forkIO $ counter (tsGenerator :: [OperadElement Integer Rational PathPerm]) "PathPerm"
+  --forkIO $ counter (tsGenerator :: [OperadElement Integer Rational PathRPerm]) "PathRPerm"
+  --forkIO $ counter (tsGenerator :: [OperadElement Integer Rational RPathPerm]) "RPathPerm"
+  --forkIO $ counter (tsGenerator :: [OperadElement Integer Rational RPathRPerm]) "RPathRPerm"
+  --forkIO $ counter (tsGenerator :: [OperadElement Integer Rational PermPath]) "PermPath"
+  --forkIO $ counter (tsGenerator :: [OperadElement Integer Rational PermRPath]) "PermRPath"
+  --forkIO $ counter (tsGenerator :: [OperadElement Integer Rational RPermPath]) "RPermPath"
+  --forkIO $ counter (tsGenerator :: [OperadElement Integer Rational RPermRPath]) "RPermRPath"
+ -- list <- flex (tsGenerator :: [OperadElement Integer Rational RPermRPath]) "RPermRPath"
+
+  --threadDelay (9000000*second_us)
 
 
 --counter = do

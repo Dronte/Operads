@@ -4,6 +4,7 @@ import Math.Operad
 --import Math.Operad.OrderedTree (TreeOrdering)
 import Data.List (nub)
 import Control.Concurrent
+import Utils
 
 a = corolla 1 [1,2]
 b = corolla 2 [1,2]
@@ -39,22 +40,19 @@ glie  = opSum $ zipWith (.*.) [1,-1,-1,1,1,-1,-1,1,1,-1,-1,1] $ map ((ts!!) . (s
 -- initial list of shuffle identities  	
 ad0  = [g1,g2,g3,glie]
 
---adn1 = stepOperadicBuchberger [] ad0
---ad1 = nub $ ad0 ++ adn1
---adn2 = stepOperadicBuchberger ad0 adn1
---ad2 = nub $ ad1 ++ adn2
--- adn3 = stepOperadicBuchberger ad1 adn2
-adn1 = stepInitialOperadicBuchberger 3 [] ad0
+adn1 = stepOperadicBuchberger [] ad0
 ad1 = nub $ ad0 ++ adn1
-adn2 = stepInitialOperadicBuchberger 4 ad0 adn1
+adn2 = stepOperadicBuchberger ad0 adn1
 ad2 = nub $ ad1 ++ adn2
-adn3 = stepInitialOperadicBuchberger 5 ad1 adn2
+adn3 = stepOperadicBuchberger ad1 adn2
 ad3 = nub $ ad2 ++ adn3
 
-numberOfLeafs t = case t of DTLeaf _ -> 1
-                            DTVertex _ subTr -> sum $ map numberOfLeafs $ subTrees t
-
-countDimension ad i = length $ filter (==i) $ map numberOfLeafs $ map leadingMonomial ad
+--adn1 = stepInitialOperadicBuchberger 3 [] ad0
+--ad1 = nub $ ad0 ++ adn1
+--adn2 = stepInitialOperadicBuchberger 4 ad0 adn1
+--ad2 = nub $ ad1 ++ adn2
+--adn3 = stepInitialOperadicBuchberger 5 ad1 adn2
+--ad3 = nub $ ad2 ++ adn3
 
 second_us = 1000000
 main = do
