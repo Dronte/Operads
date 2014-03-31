@@ -17,10 +17,10 @@ import Math.Operad.MapOperad
 
 import Math.Operad.OrderedTree
 
-#ifdef TRACE
+-- #ifdef TRACE
 import Debug.Trace
 import Math.Operad.PPrint
-#endif
+-- #endif
 
 -- * Fundamental data types and instances
 
@@ -339,9 +339,9 @@ scmToEmbedding scm s t = let
     rEm = findHighEmbedding scm
   in if isNothing lEm || isNothing rEm 
      then error ("Bad SCM in scmToEmbedding" 
-#ifdef TRACE
+-- #ifdef TRACE
                  ++ ": lEm is " ++ pp lEm ++ " and rEm is " ++ pp rEm ++ " for\n\t" ++ show s ++ "\n\t" ++ show t ++ "\n\t" ++ show scm
-#endif
+-- #endif
                 )
      else (fromJust lEm, fromJust rEm)
 
@@ -527,6 +527,7 @@ stepNSOperadicBuchberger oldGB newGB = stepNSInitialOperadicBuchberger maxBound 
 stepInitialOperadicBuchberger :: (Ord a, Show a, TreeOrdering t, Fractional n, Eq n, Show n) => 
                           Int -> [OperadElement a n t] -> [OperadElement a n t] -> [OperadElement a n t]
 stepInitialOperadicBuchberger maxD oldGb newGb =
+  traceShow maxD $
     nub $ 
     filter (not . isZero) $ 
     do

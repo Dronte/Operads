@@ -12,7 +12,7 @@ import qualified Data.Map as M
 import Math.Operad.OrderedTree
 import Control.Arrow
 
-data (Ord a, Show a, TreeOrdering t) => StoredTree a t = ST [[a]] [Int] (OrderedTree a t) deriving (Show, Read, Eq)
+data StoredTree a t = ST [[a]] [Int] (OrderedTree a t) deriving (Show, Read, Eq)
 
 sot :: (Ord a, Show a, TreeOrdering t) => OrderedTree a t -> StoredTree a t
 sot pdt = let
@@ -26,7 +26,7 @@ instance (Ord a, Show a, TreeOrdering t) => Ord (StoredTree a t) where
     compare (ST pathseq pathperm (OT t o)) (ST pathseq' pathperm' (OT s _)) = 
         comparePathSequence o t (pathseq,pathperm) s (pathseq', pathperm')
 
-data (Ord a, Show a, TreeOrdering t) => Map a t v = TM (M.Map (StoredTree a t) v) deriving (Show, Read, Eq, Ord)
+data Map a t v = TM (M.Map (StoredTree a t) v) deriving (Show, Read, Eq, Ord)
 
 filter :: (Ord a, Show a, TreeOrdering t) => (v -> Bool) -> Map a t v -> Map a t v
 filter f (TM m) = TM $ M.filter f m

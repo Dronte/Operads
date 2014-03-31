@@ -151,6 +151,9 @@ Flag UseOldMap
      Description:       Don't use the Data.Map wrapper class Math.Operad.Map. This will slow down computation.
      Default:           False
 
+Flag Trace
+     Description:       For debugging facilities
+     Default:           True
 
 
 Library 
@@ -164,3 +167,5 @@ Library
            CPP-Options:         -DUSE_MAPOPERAD
         if flag(useoldmap)
            CPP-Options:         -DUSE_OLDMAP
+        if flag(trace)
+           CPP-Options:         -DTRACE
