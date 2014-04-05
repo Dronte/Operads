@@ -427,6 +427,9 @@ applyReconstruction em m = let
         newDT <- reconstructTree (dt ordT) em
         return $ (ot newDT, n)
     in oe $ mapMaybe reconstructor (toList m)
+-- | Dronte: mapMaybe applyes reconstructor to every element of
+       -- (toList m) which has type ([(OrderedTree,n )]) where n -
+       -- coefficent in polynomial of m
 
 -- | Finds all S polynomials for a given list of operad elements. 
 findAllSPolynomials :: (Ord a, Show a, TreeOrdering t, Fractional n, Eq n, Show n) => 
@@ -527,7 +530,6 @@ stepNSOperadicBuchberger oldGB newGB = stepNSInitialOperadicBuchberger maxBound 
 stepInitialOperadicBuchberger :: (Ord a, Show a, TreeOrdering t, Fractional n, Eq n, Show n) => 
                           Int -> [OperadElement a n t] -> [OperadElement a n t] -> [OperadElement a n t]
 stepInitialOperadicBuchberger maxD oldGb newGb =
-  traceShow maxD $
     nub $ 
     filter (not . isZero) $ 
     do

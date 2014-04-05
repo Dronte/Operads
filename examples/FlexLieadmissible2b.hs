@@ -1,6 +1,7 @@
 module Main where
 
 import Math.Operad 
+--import Math.Operad.PPrint (pp,pP)
 --import Math.Operad.OrderedTree (TreeOrdering)
 import Data.List (nub)
 import Control.Concurrent
