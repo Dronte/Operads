@@ -52,3 +52,6 @@ steps monoms = [fst a|
 
 hilbertSeries n ad = map length $ map (basisElements [a,b] (map leadingMonomial ad)) $ [1..n]
 
+main = do
+  putStrLn $ show $ map (hilbertSeries 5) $ monomial 2
+
