@@ -68,18 +68,20 @@ func = do
   putStrLn $ unlines $ map show $ map length $ map (basisElements [a, b] (map leadingMonomial ad0)) $ [1..5]
   putStrLn $ "dimensions of ad0 \t"
   putStrLn $ unlines $ map show $ zip [1..5] $ map  (countDimension ad0) [1..5]
-
+  putStrLn $ unlines $ map pp $ map leadingMonomial ad0
   putStrLn $ "length ad1:\t" ++ (show $ length ad1)
   putStrLn $ unlines $ map show $ map length $ map (basisElements [a, b] (map leadingMonomial ad1)) $ [1..5]
   putStrLn $ "dimensions of ad1 \t"
   putStrLn $ unlines $ map show $ zip [1..5] $ map  (countDimension ad1) [1..5]
+  putStrLn $ unlines $ map pp $ map leadingMonomial ad1
   -- putStrLn $ "length nub (map leadingMonomial) ad1:\t" ++ (show $ length $ nub $ map leadingMonomial ad1)
   putStrLn $ "length ad2:\t" ++ (show $ length ad2)
   putStrLn $ unlines $ map show $ map length $ map (basisElements [a, b] (map leadingMonomial ad2)) $ [1..5]
   putStrLn $ "dimensions of ad2 \t"
   putStrLn $ unlines $ map show $ zip [1..5] $ map  (countDimension ad2) [1..5]
+  putStrLn $ unlines $ map pp $ map leadingMonomial ad2
   -- putStrLn $ "length nub (map leadingMonomial) ad2:\t" ++ (show $ length $ nub $ map leadingMonomial ad2)
-  putStrLn $ "length ad3:\t" ++ (show $ length ad3)
+  --putStrLn $ "length ad3:\t" ++ (show $ length ad3)
   -- putStrLn $ "length nub (map leadingMonomial) ad3:\t" ++ (show $ length $ nub $ map leadingMonomial ad3)
-  putStrLn $ unlines $ map show $ map length $ map (basisElements [a, b] (map leadingMonomial ad3)) $ [1,2,3,4,5]
+  --putStrLn $ unlines $ map show $ map length $ map (basisElements [a, b] (map leadingMonomial ad3)) $ [1,2,3,4,5]
 
