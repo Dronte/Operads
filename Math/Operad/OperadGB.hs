@@ -7,7 +7,7 @@
 module Math.Operad.OperadGB where
 
 import Prelude hiding (mapM, sequence)
-import Data.List (sort, sortBy, findIndex, nub, (\\))
+import Data.List (sort, sortBy, findIndex, nub, (\\),delete)
 import Data.Ord
 import Data.Foldable (foldMap, Foldable)
 import Control.Monad hiding (mapM)
@@ -18,7 +18,7 @@ import Math.Operad.MapOperad
 import Math.Operad.OrderedTree
 
 -- #ifdef TRACE
-import Debug.Trace
+import Debug.Trace (trace)
 import Math.Operad.PPrint
 -- #endif
 
@@ -515,6 +515,17 @@ reduceCompletely op gbn =
         if nop == op then leadingOTerm op + (reduceCompletely (op - (leadingOTerm op)) gb)
         else reduceCompletely nop gb
 
+-- |Differs from reduceCompletely reducing only leading term
+reduceLtOnly op [] = op
+reduceLtOnly op gbn = 
+    if isZero op then op
+    else let
+        gb = filter (not . isZero) gbn
+        nop = reduceInitial op gb
+      in
+        if nop == op then op
+        else reduceCompletely nop gb
+
 -- | Perform one iteration of the Buchberger algorithm: generate all S-polynomials. Reduce all S-polynomials.
 -- Return anything that survived the reduction.
 stepOperadicBuchberger :: (Ord a, Show a, TreeOrdering t, Fractional n, Eq n, Show n) => 
@@ -531,7 +542,7 @@ stepInitialOperadicBuchberger :: (Ord a, Show a, TreeOrdering t, Fractional n, E
                           Int -> [OperadElement a n t] -> [OperadElement a n t] -> [OperadElement a n t]
 stepInitialOperadicBuchberger maxD oldGb newGb =
     nub $ 
-    filter (not . isZero) $ 
+    filter (not . isZero) $ -- reduceTotaly [] $
     do
   spol <- findInitialSPolynomials maxD oldGb newGb
   guard $ maxOperationDegree spol <= maxD
@@ -539,6 +550,16 @@ stepInitialOperadicBuchberger maxD oldGb newGb =
           reduceCompletely spol (oldGb ++ newGb)
   guard $ not . isZero $ red
   return red
+  where
+    reduceTotaly oldad ad = if ad == oldad then ad
+                     else reduceTotaly (reduceList ad) ad
+    reduceList ad =loop [] (head ad) (tail ad)
+    loop prefix x [] = prefix++[reduceLtOnly x prefix]
+    loop prefix x suffix =
+      loop (prefix++[reduceLtOnly x (prefix++suffix)]) (head suffix) (tail suffix)
+
+
+
 
 -- | Non-symmetric version of 'stepInitialOperadicBuchberger'.
 stepNSInitialOperadicBuchberger :: (Ord a, Show a, TreeOrdering t, Fractional n, Eq n, Show n) => 
