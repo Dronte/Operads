@@ -62,39 +62,11 @@ main = do
   threadDelay (8400*second_us)
   killThread threadID
 
-reduceElementl :: OperadElement Integer Rational PathPerm->[OperadElement Integer Rational PathPerm]->
-                 OperadElement Integer Rational PathPerm
-reduceElementl x y = reduceCompletely x y
-
-
-reduceElementr :: [OperadElement Integer Rational PathPerm]->OperadElement Integer Rational PathPerm->
-                 OperadElement Integer Rational PathPerm
-reduceElementr x y = reduceCompletely y x
-
-
---reduceR :: [OperadElement Integer Rational RPermRPath]->[OperadElement Integer Rational RPermRPath]->
-                 --[OperadElement Integer Rational RPathRPerm]
-reduceR l [] = l
-reduceR l ad = reduceR ((reduceCompletely a as):l) as
-               where
-               a:as = ad
---reduceLtOnly op [] = op
---reduceLtOnly op gbn = 
-    --if isZero op then op
-    --else let
-        --gb = filter (not . isZero) gbn
-        --nop = reduceInitial op gb
-      --in
-        --if nop == op then op
-        --else reduceCompletely nop gb
-
 reduceList ad = loop [] (head ad) (tail ad)
   where
     loop prefix x [] = prefix++[reduceLtOnly x prefix]
     loop prefix x suffix =
       loop (prefix++[reduceLtOnly x (prefix++suffix)]) (head suffix) (tail suffix)
-
---reduceRR ad = map (\x->reduceCompletely x (filter (\=x) ad) )  ad
 
 reduceTotaly ad = reduceTotaly' ad []
   where
