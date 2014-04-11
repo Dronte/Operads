@@ -6,6 +6,7 @@ import Math.Operad
 import Data.List (nub)
 import Control.Concurrent
 import Utils
+import Debug.Trace(trace,traceShow)
 
 a = corolla 1 [1,2]
 b = corolla 2 [1,2]
@@ -42,9 +43,9 @@ glie  = opSum $ zipWith (.*.) [1,-1,-1,1,1,-1,-1,1,1,-1,-1,1] $ map ((ts!!) . (s
 ad0  = [g1,g2,g3,glie]
 
 adn1 = stepOperadicBuchberger [] ad0
-ad1 = nub $ ad0 ++ adn1
+ad1 = reduceTotaly $ nub $ ad0 ++ adn1
 adn2 = stepOperadicBuchberger ad0 adn1
-ad2 = nub $ ad1 ++ adn2
+ad2 = reduceTotaly $ nub $ ad1 ++ adn2
 adn3 = stepOperadicBuchberger ad1 adn2
 ad3 = nub $ ad2 ++ adn3
 
@@ -61,8 +62,44 @@ main = do
   threadDelay (8400*second_us)
   killThread threadID
 
+reduceElementl :: OperadElement Integer Rational PathPerm->[OperadElement Integer Rational PathPerm]->
+                 OperadElement Integer Rational PathPerm
+reduceElementl x y = reduceCompletely x y
 
 
+reduceElementr :: [OperadElement Integer Rational PathPerm]->OperadElement Integer Rational PathPerm->
+                 OperadElement Integer Rational PathPerm
+reduceElementr x y = reduceCompletely y x
+
+
+--reduceR :: [OperadElement Integer Rational RPermRPath]->[OperadElement Integer Rational RPermRPath]->
+                 --[OperadElement Integer Rational RPathRPerm]
+reduceR l [] = l
+reduceR l ad = reduceR ((reduceCompletely a as):l) as
+               where
+               a:as = ad
+--reduceLtOnly op [] = op
+--reduceLtOnly op gbn = 
+    --if isZero op then op
+    --else let
+        --gb = filter (not . isZero) gbn
+        --nop = reduceInitial op gb
+      --in
+        --if nop == op then op
+        --else reduceCompletely nop gb
+
+reduceList ad = loop [] (head ad) (tail ad)
+  where
+    loop prefix x [] = prefix++[reduceLtOnly x prefix]
+    loop prefix x suffix =
+      loop (prefix++[reduceLtOnly x (prefix++suffix)]) (head suffix) (tail suffix)
+
+--reduceRR ad = map (\x->reduceCompletely x (filter (\=x) ad) )  ad
+
+reduceTotaly ad = reduceTotaly' ad []
+  where
+    reduceTotaly' ad oldad = if ad == oldad then filter (not . isZero) ad
+                     else reduceTotaly' (reduceList ad) ad
 func = do
   putStrLn $ "length ad0:\t" ++ (show $ length ad0)
   putStrLn $ unlines $ map show $ map length $ map (basisElements [a, b] (map leadingMonomial ad0)) $ [1..5]
