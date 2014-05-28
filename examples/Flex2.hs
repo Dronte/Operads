@@ -4,6 +4,7 @@ import Math.Operad
 --import Math.Operad.OrderedTree (TreeOrdering)
 import Data.List (nub)
 import Control.Concurrent
+import Debug.Trace
 
 a = corolla 1 [1,2]
 b = corolla 2 [1,2]
@@ -26,7 +27,7 @@ flex ts = take 3 [fst a |
                    a<-generateList[(ad0,stepOperadicBuchberger [] ad0)]]
     where
     opSum = foldr (+) zero
-    g1    = opSum $ zipWith (.*.) [1,-1,1,-1] $ map ((ts!!) . (subtract 1)) [1,2,11,12]
+    g1    = (\x -> trace ("Trace "++(pp x)) x) $ opSum$ (\x -> trace ("Trace2 "++(pp x)) x) $ zipWith (.*.) [1,-1,1,-1] $ map ((ts!!) . (subtract 1)) [1,2,11,12]
     g2    = opSum $ zipWith (.*.) [1,-1,1,-1] $ map ((ts!!) . (subtract 1)) [5,6,9,10]
     g3    = opSum $ zipWith (.*.) [1,-1,1,-1] $ map ((ts!!) . (subtract 1)) [7,8,3,4]
     ad0  = [g1,g2,g3]
@@ -36,7 +37,7 @@ flex ts = take 3 [fst a |
 --generate list !!n - nth iteration stepOperadicBuchberger
 
 counter :: TreeOrdering t => [OperadElement Integer Rational t] -> String -> IO ()
-kkkkkkkkkkkcounter ts name = do
+counter ts name = do
   result <- return $ flex ts
   loop result 1
        where
@@ -46,8 +47,10 @@ kkkkkkkkkkkcounter ts name = do
 
 second_us = 1000000
 list = flex (tsGenerator :: [OperadElement Integer Rational RPermRPath])
---main = do
-  --forkIO $ counter (tsGenerator :: [OperadElement Integer Rational PathPerm]) "PathPerm"
+tst = tsGenerator :: [OperadElement Integer Rational PathPerm]
+main = do
+  forkIO $ counter (tsGenerator :: [OperadElement Integer Rational LengthPathPerm]) "LengtPathPerm"
+  -- forkIO $ counter (tsGenerator :: [OperadElement Integer Rational PathPerm]) "PathPerm"
   --forkIO $ counter (tsGenerator :: [OperadElement Integer Rational PathRPerm]) "PathRPerm"
   --forkIO $ counter (tsGenerator :: [OperadElement Integer Rational RPathPerm]) "RPathPerm"
   --forkIO $ counter (tsGenerator :: [OperadElement Integer Rational RPathRPerm]) "RPathRPerm"
@@ -57,7 +60,7 @@ list = flex (tsGenerator :: [OperadElement Integer Rational RPermRPath])
   --forkIO $ counter (tsGenerator :: [OperadElement Integer Rational RPermRPath]) "RPermRPath"
  -- list <- flex (tsGenerator :: [OperadElement Integer Rational RPermRPath]) "RPermRPath"
 
-  --threadDelay (9000000*second_us)
+  threadDelay (9000000*second_us)
 
 
 --counter = do

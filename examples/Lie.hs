@@ -3,18 +3,20 @@ module Main where
 import Math.Operad 
 import Data.List (nub)
 import Control.Concurrent
+import Debug.Trace
 -- calculation for Lie operad
 a = corolla 1 [1,2] -- The only operation
 -- b = corolla 2 [1,2]
 
-ts :: [OperadElement Integer Rational RPathPerm]
+ts :: [OperadElement Integer Rational LengthPathPerm]
+-- ts :: [OperadElement Integer Rational RPathPerm]
 ts = map oet
      [shuffleCompose 1 [1,2,3] a a, shuffleCompose 2 [1,2,3] a a, shuffleCompose 1 [1,3,2] a a]
 --      shuffleCompose 2 [1,2,3] a b, shuffleCompose 1 [1,2,3] a b, shuffleCompose 1 [1,3,2] b a, 
  --     shuffleCompose 2 [1,2,3] b a, shuffleCompose 1 [1,3,2] b b, shuffleCompose 1 [1,3,2] a b, 
   --    shuffleCompose 1 [1,2,3] b a, shuffleCompose 2 [1,2,3] b b, shuffleCompose 1 [1,2,3] b b]
 opSum = foldr (+) zero
-jacobi= opSum $ zipWith (.*.) [1,-1,-1] $ map ((ts!!) . (subtract 1)) [1,2,3]
+jacobi= (\x->trace (pp x) x) $ opSum $ zipWith (.*.) [1,-1,-1] $ map ((ts!!) . (subtract 1)) [1,2,3]
 -- It's not beautifull to write [0,1,2] that's why we call subtract
 ad0 = [jacobi]
 adn1 = stepOperadicBuchberger [] ad0

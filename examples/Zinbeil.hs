@@ -6,7 +6,7 @@ import Control.Concurrent
 a = corolla 1 [1,2] 
 b = corolla 2 [1,2]
 
-ts :: [OperadElement Integer Rational RPathPerm]
+ts :: [OperadElement Integer Rational PathPerm]
 ts = map oet
      [shuffleCompose 1 [1,2,3] a a, shuffleCompose 2 [1,2,3] a a, shuffleCompose 1 [1,3,2] a a,
       shuffleCompose 2 [1,2,3] a b, shuffleCompose 1 [1,2,3] a b, shuffleCompose 1 [1,3,2] b a, 

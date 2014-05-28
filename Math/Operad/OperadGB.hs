@@ -18,7 +18,7 @@ import Math.Operad.MapOperad
 import Math.Operad.OrderedTree
 
 -- #ifdef TRACE
-import Debug.Trace (trace)
+import Debug.Trace (trace,traceIO,traceStack)
 import Math.Operad.PPrint
 -- #endif
 
@@ -439,8 +439,9 @@ findAllSPolynomials = findInitialSPolynomials maxBound
 -- | Finds all S polynomials for which the operationdegree stays bounded.
 findInitialSPolynomials :: (Ord a, Show a, TreeOrdering t, Fractional n, Show n, Eq n) =>
                            Int -> [OperadElement a n t] -> [OperadElement a n t] -> [OperadElement a n t]
-findInitialSPolynomials n oldGb newGb = nub . map (\o -> (1/leadingCoefficient o) .*. o) . filter (not . isZero) $ do
-    g1 <- oldGb ++ newGb
+findInitialSPolynomials n oldGb newGb = nub . map (\o -> (1/leadingCoefficient o) .*. o) . filter (not . isZero)
+                                         $ do
+    g1 <- (\x->trace (show newGb) x) $ oldGb ++ newGb
     g2 <- newGb
     findSPolynomials n g1 g2 ++ findSPolynomials n g2 g1
 
@@ -542,9 +543,9 @@ stepInitialOperadicBuchberger :: (Ord a, Show a, TreeOrdering t, Fractional n, E
                           Int -> [OperadElement a n t] -> [OperadElement a n t] -> [OperadElement a n t]
 stepInitialOperadicBuchberger maxD oldGb newGb =
     nub $ 
-    filter (not . isZero) $ -- reduceTotaly [] $
+    filter (not . isZero) $ (\x->traceStack ("newGB= "++(pp newGb)) x) $ --reduceTotaly [] $
     do
-  spol <- findInitialSPolynomials maxD oldGb newGb
+  spol <- (\x->trace "Find initial s poly" x) $ findInitialSPolynomials maxD oldGb newGb
   guard $ maxOperationDegree spol <= maxD
   let red = 
           reduceCompletely spol (oldGb ++ newGb)

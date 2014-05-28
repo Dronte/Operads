@@ -1,9 +1,10 @@
 module Main where
 
 import Math.Operad 
-import Data.List (nub,delete)
+import Data.List (nub,delete,permutations)
 import Control.Concurrent
 import Debug.Trace
+import Utils
 
 a = corolla 1 [1,2]
 b = corolla 2 [1,2]
@@ -51,6 +52,17 @@ steps monoms = [fst a|
       generateList list = list ++ [(basis a,step a) | a<-generateList list]
 
 hilbertSeries n ad = map length $ map (basisElements [a,b] (map leadingMonomial ad)) $ [1..n]
+
+trees :: [DecoratedTree Integer]->Int->[DecoratedTree Integer]
+trees corollas 1 = corollas
+trees corollas n = concat [concat $ appendCorollas corollas n t| t<-(trees corollas (n-1))]
+  where
+    appendCorollas :: [DecoratedTree Integer]->Int->DecoratedTree Integer->[[DecoratedTree Integer]]
+    appendCorollas corollas n tree = map (appendCorolla tree n) corollas
+    appendCorolla :: DecoratedTree Integer->Int->DecoratedTree Integer->[DecoratedTree Integer]
+    appendCorolla tree n corolla = map (\x->appendShuffle x tree corolla n) [1..n]
+    appendShuffle x tree corolla n = map (\y->shuffleCompose x y tree corolla) $
+                                     filter (\sh->(isShuffleIPQ sh x (nLeaves corolla-1))) (permutations [1..n])
 
 main = do
   putStrLn $ show $ map (hilbertSeries 5) $ monomial 2
