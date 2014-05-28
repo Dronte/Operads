@@ -36,7 +36,7 @@ flex ts = take 3 [fst a |
 --generate list !!n - nth iteration stepOperadicBuchberger
 
 counter :: TreeOrdering t => [OperadElement Integer Rational t] -> String -> IO ()
-kkkkkkkkkkkcounter ts name = do
+counter ts name = do
   result <- return $ flex ts
   loop result 1
        where

@@ -542,7 +542,7 @@ stepInitialOperadicBuchberger :: (Ord a, Show a, TreeOrdering t, Fractional n, E
                           Int -> [OperadElement a n t] -> [OperadElement a n t] -> [OperadElement a n t]
 stepInitialOperadicBuchberger maxD oldGb newGb =
     nub $ 
-    filter (not . isZero) $ -- reduceTotaly [] $
+    filter (not . isZero) $ reduceLtOnly [] $
     do
   spol <- findInitialSPolynomials maxD oldGb newGb
   guard $ maxOperationDegree spol <= maxD
