@@ -516,6 +516,7 @@ reduceCompletely op gbn =
         else reduceCompletely nop gb
 
 -- |Differs from reduceCompletely reducing only leading term
+reduceLtOnly :: (Ord a, Show a, TreeOrdering t, Fractional n, Eq n, Show n) => OperadElement a n t -> [OperadElement a n t] -> OperadElement a n t
 reduceLtOnly op [] = op
 reduceLtOnly op gbn = 
     if isZero op then op
@@ -528,9 +529,25 @@ reduceLtOnly op gbn =
 
 -- | Perform one iteration of the Buchberger algorithm: generate all S-polynomials. Reduce all S-polynomials.
 -- Return anything that survived the reduction.
-stepOperadicBuchberger :: (Ord a, Show a, TreeOrdering t, Fractional n, Eq n, Show n) => 
+stepOperadicBuchbergerCompletely :: (Ord a, Show a, TreeOrdering t, Fractional n, Eq n, Show n) => 
                           [OperadElement a n t] -> [OperadElement a n t] -> [OperadElement a n t]
-stepOperadicBuchberger oldGb newGb = stepInitialOperadicBuchberger maxBound oldGb newGb
+stepOperadicBuchbergerCompletely oldGb newGb = reduceList reduceCompletely [] $ stepInitialOperadicBuchberger maxBound oldGb newGb
+
+stepOperadicBuchbergerLtOnly :: (Ord a, Show a, TreeOrdering t, Fractional n, Eq n, Show n) => 
+                          [OperadElement a n t] -> [OperadElement a n t] -> [OperadElement a n t]
+stepOperadicBuchbergerLtOnly oldGb newGb = reduceList reduceLtOnly [] $ stepInitialOperadicBuchberger maxBound oldGb newGb
+                                               
+reduceList :: (Ord a, Show a, TreeOrdering t, Fractional n, Eq n, Show n) => 
+              (OperadElement a n t -> [OperadElement a n t] -> OperadElement a n t)
+              -> [OperadElement a n t] -> [OperadElement a n t] -> [OperadElement a n t]
+reduceList reduceFunction oldad ad = if ad == oldad then ad
+                                     else reduceList reduceFunction (reduceList' ad) ad
+                                          where
+                                          reduceList' ad = loop [] (head ad) (tail ad)
+                                          loop prefix x [] = prefix++[reduceFunction x prefix]
+                                          loop prefix x suffix =
+                                            loop (prefix++[reduceFunction x (prefix++suffix)]) (head suffix) (tail suffix)
+
 
 stepNSOperadicBuchberger :: (Ord a, Show a, TreeOrdering t, Fractional n, Eq n, Show n) => 
                           [OperadElement a n t] -> [OperadElement a n t] -> [OperadElement a n t]
@@ -542,7 +559,7 @@ stepInitialOperadicBuchberger :: (Ord a, Show a, TreeOrdering t, Fractional n, E
                           Int -> [OperadElement a n t] -> [OperadElement a n t] -> [OperadElement a n t]
 stepInitialOperadicBuchberger maxD oldGb newGb =
     nub $ 
-    filter (not . isZero) $ reduceLtOnly [] $
+    filter (not . isZero) $ 
     do
   spol <- findInitialSPolynomials maxD oldGb newGb
   guard $ maxOperationDegree spol <= maxD
@@ -550,13 +567,6 @@ stepInitialOperadicBuchberger maxD oldGb newGb =
           reduceCompletely spol (oldGb ++ newGb)
   guard $ not . isZero $ red
   return red
-  where
-    reduceTotaly oldad ad = if ad == oldad then ad
-                     else reduceTotaly (reduceList ad) ad
-    reduceList ad =loop [] (head ad) (tail ad)
-    loop prefix x [] = prefix++[reduceLtOnly x prefix]
-    loop prefix x suffix =
-      loop (prefix++[reduceLtOnly x (prefix++suffix)]) (head suffix) (tail suffix)
 
 
 
