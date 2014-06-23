@@ -23,11 +23,11 @@ identyties = [  identyty [1,2,4],
                 identyty [7,8,6],
                 identyty [11,12,10]]
 ad0 = identyties
-adn1 = stepOperadicBuchberger [] ad0
+adn1 = stepOperadicBuchbergerLtOnly [] ad0
 ad1 = nub $ ad0 ++ adn1
-adn2 = stepOperadicBuchberger ad0 adn1
+adn2 = stepOperadicBuchbergerLtOnly ad0 adn1
 ad2 = nub $ ad1 ++ adn2
-adn3 = stepOperadicBuchberger ad1 adn2
+adn3 = stepOperadicBuchbergerLtOnly ad1 adn2
 ad3 = nub $ ad2 ++ adn3
 
 second_us = 1000000
