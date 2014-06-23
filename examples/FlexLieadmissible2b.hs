@@ -42,11 +42,11 @@ glie  = opSum $ zipWith (.*.) [1,-1,-1,1,1,-1,-1,1,1,-1,-1,1] $ map ((ts!!) . (s
 -- initial list of shuffle identities  	
 ad0  = [g1,g2,g3,glie]
 
-adn1 = stepOperadicBuchberger [] ad0
-ad1 = reduceTotaly $ nub $ ad0 ++ adn1
-adn2 = stepOperadicBuchberger ad0 adn1
-ad2 = reduceTotaly $ nub $ ad1 ++ adn2
-adn3 = stepOperadicBuchberger ad1 adn2
+adn1 = stepOperadicBuchbergerCompletely [] ad0
+ad1 =  nub $ ad0 ++ adn1
+adn2 = stepOperadicBuchbergerCompletely ad0 adn1
+ad2 =  nub $ ad1 ++ adn2
+adn3 = stepOperadicBuchbergerCompletely ad1 adn2
 ad3 = nub $ ad2 ++ adn3
 
 --adn1 = stepInitialOperadicBuchberger 3 [] ad0
@@ -62,16 +62,6 @@ main = do
   threadDelay (8400*second_us)
   killThread threadID
 
-reduceList ad = loop [] (head ad) (tail ad)
-  where
-    loop prefix x [] = prefix++[reduceLtOnly x prefix]
-    loop prefix x suffix =
-      loop (prefix++[reduceLtOnly x (prefix++suffix)]) (head suffix) (tail suffix)
-
-reduceTotaly ad = reduceTotaly' ad []
-  where
-    reduceTotaly' ad oldad = if ad == oldad then filter (not . isZero) ad
-                     else reduceTotaly' (reduceList ad) ad
 func = do
   putStrLn $ "length ad0:\t" ++ (show $ length ad0)
   putStrLn $ unlines $ map show $ map length $ map (basisElements [a, b] (map leadingMonomial ad0)) $ [1..5]
