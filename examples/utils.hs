@@ -15,3 +15,6 @@ numberOfLeafs t = case t of DTLeaf _ -> 1
                             DTVertex _ subTr -> sum $ map numberOfLeafs $ subTrees t
 
 countDimension ad i = length $ filter (==i) $ map numberOfLeafs $ map leadingMonomial ad
+
+isReduced basis = not $ or $ concat $ [ map (\x->(x/=div) && divides x div) lBasis | div<-lBasis ]
+                  where lBasis = map leadingMonomial basis

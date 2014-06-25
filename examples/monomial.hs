@@ -39,5 +39,5 @@ steps monoms = [fst a|
 hilbertSeries n ad = map length $ map (basisElements [a,b] (map leadingMonomial ad)) $ [1..n]
 
 main = do
-  putStrLn $ unlines $map (\x->(pp $ fst x)++(show $ snd x)) $ map (\x->(x,hilbertSeries 5 x)) $ monomial 3
+  putStrLn $ unlines $map (\x->(pp $ fst x)++(show $ snd x)) $ map (\x->(x,hilbertSeries 5 x)) $ monomial 4
 

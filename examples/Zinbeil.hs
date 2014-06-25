@@ -30,14 +30,7 @@ ad2 = nub $ ad1 ++ adn2
 adn3 = stepOperadicBuchbergerLtOnly ad1 adn2
 ad3 = nub $ ad2 ++ adn3
 
-second_us = 1000000
 main = do
-  threadID <- forkIO func
-  threadDelay (300*second_us)
-  killThread threadID
-
-
-func = do
   putStrLn $ "length ad1:\t" ++ (show $ length ad1)
   putStrLn $ "length ad2:\t" ++ (show $ length ad2)
   putStrLn $ "length ad3:\t" ++ (show $ length ad3)
