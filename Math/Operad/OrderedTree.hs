@@ -251,6 +251,22 @@ instance TreeOrdering RPermRPath where
                            else if any (/= EQ) cS then head (filter (/=EQ) cS) else EQ
     ordering = RPermRPath
 
+-- | Order my Michail Tokmakov
+data LengthPathPerm = LengthPathPerm deriving (Eq, Ord, Show, Read)
+instance TreeOrdering LengthPathPerm where
+    treeCompare o s t = if (nLeaves s) /= (nLeaves t) then comparing nLeaves s t
+                        else if s == t then EQ 
+                        else comparePathSequence o s (orderedPathSequence s) t (orderedPathSequence t)
+    comparePathSequence _ _ (paths,perms) _ (patht,permt) = let
+                            clS = zipWith (comparing length) paths patht
+                            coS = zipWith compare paths patht
+                            cs = zipWith (\comp1 comp2 -> if comp1 == EQ then comp2 else comp1) clS coS
+                         in
+                           if any (/= EQ) clS then head (filter (/=EQ) clS)
+                           else if any (/= EQ) coS then head (filter (/=EQ) coS)
+                                else
+                                  compare perms permt
+    ordering = LengthPathPerm
 
 -- ** Utility functions on trees
 --

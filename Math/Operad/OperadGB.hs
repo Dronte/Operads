@@ -439,8 +439,7 @@ findAllSPolynomials = findInitialSPolynomials maxBound
 -- | Finds all S polynomials for which the operationdegree stays bounded.
 findInitialSPolynomials :: (Ord a, Show a, TreeOrdering t, Fractional n, Show n, Eq n) =>
                            Int -> [OperadElement a n t] -> [OperadElement a n t] -> [OperadElement a n t]
-findInitialSPolynomials n oldGb newGb = --traceStack (pp n ++ pp oldGb ++ pp newGb) $
-  nub . map (\o -> (1/leadingCoefficient o) .*. o) . filter (not . isZero) $ do
+findInitialSPolynomials n oldGb newGb = nub . map (\o -> (1/leadingCoefficient o) .*. o) . filter (not . isZero) $ do
     g1 <- oldGb ++ newGb
     g2 <- newGb
     findSPolynomials n g1 g2 ++ findSPolynomials n g2 g1
@@ -507,8 +506,7 @@ reduceInitial op gb = if isZero op
 -- | Reduce all terms of @op@ with respect to @gbn@.
 reduceCompletely :: (Ord a, Show a, TreeOrdering t, Fractional n, Eq n, Show n) => OperadElement a n t -> [OperadElement a n t] -> OperadElement a n t
 reduceCompletely op [] = op
-reduceCompletely op gbn = --traceStack (pp op ++ pp gbn) $
-    if isZero op then op
+reduceCompletely op gbn = if isZero op then op
     else let
         gb = filter (not . isZero) gbn
         nop = reduceInitial op gb
@@ -541,8 +539,7 @@ stepOperadicBuchbergerLtOnly oldGb newGb = reduceList reduceLtOnly [] $ stepInit
 reduceList :: (Ord a, Show a, TreeOrdering t, Fractional n, Eq n, Show n) => 
               (OperadElement a n t -> [OperadElement a n t] -> OperadElement a n t)
               -> [OperadElement a n t] -> [OperadElement a n t] -> [OperadElement a n t]
-reduceList reduceFunction oldad ad = traceStack ("Reduce List "++(show (ad==oldad))++"\n"++(pp oldad)++(pp ad) ) $
-                                     if ad == oldad then ad
+reduceList reduceFunction oldad ad = if ad == oldad then ad
                                      else reduceList reduceFunction ad (reduceList' ad)
                                           where
                                           reduceList' ad = loop [] (head ad) (tail ad)
@@ -666,8 +663,7 @@ allTrees gens k = nub $ do
 -- to contain the leading monomials in the Groebner basis.
 basisElements :: (Ord a, Show a) => 
                  [DecoratedTree a] -> [DecoratedTree a] -> Int -> [DecoratedTree a]
-basisElements generators divisors maxDegree = --traceStack (pp generators ++ pp divisors ++ pp maxDegree ) $
-  nub $
+basisElements generators divisors maxDegree = nub $
     if maxDegree <= 0 then [] 
     else if maxDegree == 1 then generators
          else do
