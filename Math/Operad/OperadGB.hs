@@ -542,7 +542,7 @@ reduceList :: (Ord a, Show a, TreeOrdering t, Fractional n, Eq n, Show n) =>
 reduceList reduceFunction oldad ad = if ad == oldad then ad
                                      else reduceList reduceFunction ad (reduceList' ad)
                                           where
-                                          reduceList' ad = loop [] (head ad) (tail ad)
+                                          reduceList' ad = filter (not . isZero) $ loop [] (head ad) (tail ad)
                                           loop prefix x [] = prefix++[reduceFunction x prefix]
                                           loop prefix x suffix =
                                             loop (prefix++[reduceFunction x (prefix++suffix)]) (head suffix) (tail suffix)
