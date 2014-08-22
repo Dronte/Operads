@@ -339,7 +339,7 @@ scmToEmbedding scm s t = let
     rEm = findHighEmbedding scm
   in if isNothing lEm || isNothing rEm 
      then error ("Bad SCM in scmToEmbedding" 
--- #ifdef TRACE
+-- #ifdef RACE
                  ++ ": lEm is " ++ pp lEm ++ " and rEm is " ++ pp rEm ++ " for\n\t" ++ show s ++ "\n\t" ++ show t ++ "\n\t" ++ show scm
 -- #endif
                 )
